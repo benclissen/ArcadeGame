@@ -16,7 +16,7 @@
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
-     * set the canvas element's height/width and add it to the DOM.
+     * set the canvas elements height/width and add it to the DOM.
      */
     var doc = global.document,
         win = global.window,
@@ -69,17 +69,10 @@ var Engine = (function(global) {
     }
 
     /* This function is called by main (our game loop) and itself calls all
-     * of the functions which may need to update entity's data. Based on how
-     * you implement your collision detection (when two entities occupy the
-     * same space, for instance when your character should die), you may find
-     * the need to add an additional function call here. For now, we've left
-     * it commented out - you may or may not want to implement this
-     * functionality this way (you could just implement collision detection
-     * on the entities themselves within your app.js file).
+     * of the functions which may need to update entity's data.
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -119,7 +112,7 @@ var Engine = (function(global) {
             row, col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.clearRect(0,0,canvas.width,canvas.height)
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -149,11 +142,20 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
+        /*
+          Added rendering of Gems.
+          Gems are rendered first to have enemies "walk" on them.
+        */
+        allGems.forEach(function(gem) {
+          gem.render();
         });
-
+        allEnemies.forEach(function(enemy) {
+          enemy.render();
+        });
+        // Adder for player rendering
         player.render();
+        // Added to show a popup when needed
+        game.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -169,12 +171,24 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
-        'images/stone-block.png',
+      'images/stone-block.png',
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
-    ]);
+        'images/char-boy.png',
+      // Other characters added
+        'images/char-cat-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-princess-girl.png',
+      // Gems Added
+        'images/Gem Green.png',
+        'images/Gem Orange.png',
+      // Emojis added
+        'images/happy.png',
+        'images/sad.png',
+        'images/wait.png'
+        ]);
     Resources.onReady(init);
 
     /* Assign the canvas' context object to the global variable (the window
